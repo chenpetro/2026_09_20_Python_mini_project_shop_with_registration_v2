@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}Online Shop - Place Order{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-7 col-lg-6">
+            <div class="card shadow border-0 rounded-3">
+                <div class="card-header bg-primary text-white text-center py-3">
+                    <h4 class="mb-0 fw-bold">Place an Order</h4>
+                </div>
+                <div class="card-body p-4">
+                    <!-- Flash Messages -->
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ category if category != 'message' else 'info' }} alert-dismissible fade show" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+
+                    <form action="{{ url_for('make_order') }}" method="POST">
+                        <!-- Select Product -->
+                        <div class="mb-3">
+                            <label for="product_id" class="form-label fw-semibold">Select Product</label>
+                            <select class="form-select" id="product_id" name="product_id" required>
+                                <option value="" disabled {% if not selected_id %}selected{% endif %}>Choose a product...</option>
+                                {% for product in products %}
+                                    <option value="{{ product.id }}" {% if selected_id == product.id %}selected{% endif %}>
+                                        {{ product.name }} — {{ product.price }} UAH
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <!-- Customer Email -->
+                        <div class="mb-3">
+                            <label for="email" class="form-label fw-semibold">Email Address</label>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="example@gmail.com" required>
+                        </div>
+
+                        <!-- Phone Number -->
+                        <div class="mb-4">
+                            <label for="phone_number" class="form-label fw-semibold">Phone Number</label>
+                            <input type="number" class="form-control" id="phone_number" name="phone_number" placeholder="380991234567" required>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg fw-bold">Confirm Order</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

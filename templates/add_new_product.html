@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}Online Shop - Add New Product{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow border-0 rounded-3">
+                <div class="card-header bg-success text-white text-center py-3">
+                    <h4 class="mb-0 fw-bold">Add New Product to Shop</h4>
+                </div>
+                <div class="card-body p-4">
+                    <!-- Flash Messages -->
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ category if category != 'message' else 'info' }} alert-dismissible fade show" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+
+                    <form action="/add_new_product/" method="POST" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="productName" class="form-label fw-semibold">Name: (at least 5 symbols)</label>
+                            <input type="text" class="form-control" id="productName" name="name" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="productDescription" class="form-label fw-semibold">Description: (at least 10 symbols)</label>
+                            <input type="text" class="form-control" id="productDescription" name="description" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="productPrice" class="form-label fw-semibold">Price (₴ UAH):</label>
+                            <input type="" class="form-control" id="productPrice" name="price" required>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="productImage" class="form-label fw-semibold">Product image:</label>
+                            <input type="file" class="form-control" id="productImage" name="image" required>
+                        </div>
+
+                        <button type="submit" class="btn btn-success w-100 fw-bold">Add</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

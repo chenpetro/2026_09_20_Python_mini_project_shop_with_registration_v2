@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}Online Shop - Orders{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold">All Orders</h2>
+        <a href="{{ url_for('make_order') }}" class="btn btn-primary">+ Place New Order</a>
+    </div>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category if category != 'message' else 'info' }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    {% if orders %}
+        <div class="table-responsive shadow-sm bg-white rounded">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th scope="col" class="ps-3">Order ID</th>
+                        <th scope="col">Product</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Customer Email</th>
+                        <th scope="col">Phone Number</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                        <tr>
+                            <td class="ps-3 fw-bold">#{{ order.id }}</td>
+                            <td>
+                                {% if order.product %}
+                                    <div class="d-flex align-items-center">
+                                        <img src="/static/{{ order.product.image_filename.lstrip('/') }}" 
+                                             alt="{{ order.product.name }}" 
+                                             style="width: 40px; height: 40px; object-fit: contain;" 
+                                             class="me-2 rounded bg-light p-1"
+                                             onerror="this.style.display='none';">
+                                        <span class="fw-semibold">{{ order.product.name }}</span>
+                                    </div>
+                                {% else %}
+                                    <span class="text-muted">Product N/A</span>
+                                {% endif %}
+                            </td>
+                            <td class="fw-semibold text-primary">
+                                {% if order.product %}
+                                    {{ order.product.price }} UAH
+                                {% else %}
+                                    —
+                                {% endif %}
+                            </td>
+                            <td>{{ order.email }}</td>
+                            <td>+{{ order.phone_number }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="text-center py-5 bg-white shadow-sm rounded">
+            <p class="text-muted fs-5 mb-3">No orders found.</p>
+            <a href="{{ url_for('make_order') }}" class="btn btn-primary">Place the First Order</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
