@@ -4,6 +4,7 @@ import os
 import shutil
 
 from flask import Flask, flash, redirect, render_template, request, session, url_for
+# pyright: reportMissingImports=false
 from PIL import Image, UnidentifiedImageError
 from werkzeug.utils import secure_filename
 

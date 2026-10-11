@@ -8,7 +8,8 @@ from pydantic import ValidationError
 PG_USER = "postgres"
 PG_PASSWORD = "Tesla31!"
 PG_DBNAME = "onlineshop"
-engine = create_engine(f"postgresql+psycopg2://{PG_USER}:{PG_PASSWORD}@localhost:5432/{PG_DBNAME}", echo=False)
+# engine = create_engine(f"postgresql+psycopg2://{PG_USER}:{PG_PASSWORD}@localhost:5432/{PG_DBNAME}", echo=False)
+engine = create_engine(f"sqlite:///onlineshop.db", echo=False)
 
 SessionLocal = sessionmaker(bind=engine)
 
@@ -46,6 +47,9 @@ class User(Base):
 
 
 def migrate_schema():
+    if engine.dialect.name != "postgresql":
+        return
+
     with engine.begin() as connection:
         connection.execute(
             text("ALTER TABLE users ALTER COLUMN password TYPE VARCHAR(255)")
